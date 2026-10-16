@@ -29,25 +29,28 @@ canvas{position:fixed;inset:0;pointer-events:none;z-index:9}
 <h2>外观。<span class="price">选择你喜欢的颜色。</span></h2><div class="opts" id="colors"></div>
 <h2>存储容量。<span class="price">需要多少空间？</span></h2><div class="opts" id="caps"></div>
 <h2>数量</h2><div class="opt on">1 台</div>
-<h2>收货信息 <span class="price">（选填，仅显示在回执，保存在本机）</span></h2>
-<input id="nm" placeholder="姓名（选填）"><input id="ad" placeholder="收货地址（选填）">
+<h2>取货方式</h2><div class="opt on" style="display:block">取货方式：自取 · Apple 浦东<div class="price">上海市浦东新区陆家嘴世纪大道 8 号国金中心商场</div></div>
 <div class="sum" id="sum"></div><button class="btn" id="go">立即预订</button></div>
 <div class="wrap c" id="ok"><div class="check">✓</div><h1>订单已提交</h1><div class="sub">订单号 <span id="no"></span></div>
-<div class="ship">预计发货：10月23日</div><div class="sum" id="rc" style="text-align:left"></div>
-<div class="track"><div class="st d"><b></b>已下单</div><div class="st d"><b></b>备货中</div><div class="st"><b></b>10月23日发货</div><div class="st"><b></b>送达</div></div>
+<div class="ship">预计可取货：10月23日</div><div class="sum" id="rc" style="text-align:left"></div>
+<div class="track"><div class="st d"><b></b>已下单</div><div class="st d"><b></b>备货中</div><div class="st"><b></b>10月23日可取货</div><div class="st"><b></b>已取货</div></div>
+<canvas id="qrc" width="210" height="210" style="position:static;display:block;margin:10px auto;border-radius:12px"></canvas><div class="sub">凭此码到店取货 (娱乐)</div>
 <button class="btn" onclick="location.reload()">返回</button></div>
 <footer>娱乐页面，非 Apple 官方，不产生任何订单</footer><canvas id="cf"></canvas>
 <script>
 const C=[["星光白色","#f3efe6","white"],["夜空色","#2b313d","dark"]],S=[["256GB",15999],["512GB",17999],["1TB",20999],["2TB",24999]];
 let c=0,s=0;const $=i=>document.getElementById(i),f=n=>"RMB "+n.toLocaleString();
-nm.value=localStorage.dn||"";ad.value=localStorage.da||"";
 function r(){colors.innerHTML=C.map((x,i)=>`<div class="opt ${i==c?'on':''}" data-c="${i}"><span><span class="dot" style="background:${x[1]}"></span>${x[0]}</span></div>`).join("");
 caps.innerHTML=S.map((x,i)=>`<div class="opt ${i==s?'on':''}" data-s="${i}"><span>${x[0]}</span><span class="price">${f(x[1])}</span></div>`).join("");
-ph.className="phone "+C[c][2];sum.innerHTML=`iPhone Duo ${S[s][0]} ${C[c][0]} × 1<br>预计发货：10月23日<br><span class="total">${f(S[s][1])}</span>`}
+ph.className="phone "+C[c][2];sum.innerHTML=`iPhone Duo ${S[s][0]} ${C[c][0]} × 1<br>自取 · Apple 浦东 · 预计可取货：10月23日<br><span class="total">${f(S[s][1])}</span>`}
 document.onclick=e=>{const o=e.target.closest("[data-c],[data-s]");if(!o)return;if(o.dataset.c)c=+o.dataset.c;if(o.dataset.s)s=+o.dataset.s;r()};r();
-go.onclick=()=>{localStorage.dn=nm.value;localStorage.da=ad.value;no.textContent="W"+Math.floor(1e9+Math.random()*9e9);
-rc.innerHTML=`商品：iPhone Duo<br>颜色：${C[c][0]}<br>容量：${S[s][0]}<br>数量：1<br>金额：<b>${f(S[s][1])}</b>`+(nm.value?`<br>收货人：${nm.value.replace(/</g,"&lt;")}`:"")+(ad.value?`<br>地址：${ad.value.replace(/</g,"&lt;")}`:"");
+go.onclick=()=>{no.textContent="W"+Math.floor(1e9+Math.random()*9e9);
+rc.innerHTML=`商品：iPhone Duo<br>颜色：${C[c][0]}<br>容量：${S[s][0]}<br>数量：1<br>金额：<b>${f(S[s][1])}</b>`+`<br>取货门店：Apple 浦东<br>预计可取货：10月23日`;qr(no.textContent);
 buy.style.display="none";ok.style.display="block";scrollTo(0,0);boom()};
+function qr(t){const x=qrc.getContext("2d"),n=25,z=8,o=5;let h=0;for(const ch of t)h=(h*31+ch.charCodeAt(0))>>>0;const rnd=()=>(h=(h*1103515245+12345)>>>0)/4294967296;
+x.fillStyle="#fff";x.fillRect(0,0,210,210);x.fillStyle="#1d1d1f";const f=(a,b)=>a<7&&b<7||a>=n-7&&b<7||a<7&&b>=n-7;
+for(let i=0;i<n;i++)for(let j=0;j<n;j++)if(!f(i,j)&&rnd()<.5)x.fillRect(o+i*z,o+j*z,z,z);
+[[0,0],[n-7,0],[0,n-7]].forEach(([a,b])=>{x.fillRect(o+a*z,o+b*z,7*z,7*z);x.fillStyle="#fff";x.fillRect(o+(a+1)*z,o+(b+1)*z,5*z,5*z);x.fillStyle="#1d1d1f";x.fillRect(o+(a+2)*z,o+(b+2)*z,3*z,3*z)})}
 function boom(){const k=cf,x=k.getContext("2d");k.width=innerWidth;k.height=innerHeight;let p=[...Array(160)].map(()=>({x:k.width/2,y:k.height/3,vx:(Math.random()-.5)*14,vy:Math.random()*-12-2,c:`hsl(${Math.random()*360},90%,60%)`,a:Math.random()*6}));let t=0;
 (function l(){x.clearRect(0,0,k.width,k.height);p.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.vy+=.35;q.vx*=.99;q.a+=.2;x.save();x.translate(q.x,q.y);x.rotate(q.a);x.fillStyle=q.c;x.fillRect(-4,-2,8,4);x.restore()});if(++t<180)requestAnimationFrame(l);else x.clearRect(0,0,k.width,k.height)})()}
 </script></body></html>
