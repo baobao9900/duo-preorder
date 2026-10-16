@@ -21,6 +21,16 @@ footer{text-align:center;color:#86868b;font-size:12px;padding:20px}
 .track{display:flex;justify-content:space-between;margin:26px 0;position:relative}.track:before{content:"";position:absolute;top:11px;left:10%;right:10%;height:3px;background:#d2d2d7}
 .st{flex:1;text-align:center;font-size:12px;position:relative}.st b{display:block;width:24px;height:24px;border-radius:50%;background:#d2d2d7;margin:0 auto 6px}.st.d b{background:#0071e3}
 canvas{position:fixed;inset:0;pointer-events:none;z-index:9}
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:flex-end;z-index:8}.mask.on{display:flex}
+.sheet{background:#fff;width:100%;max-width:560px;margin:0 auto;border-radius:20px 20px 0 0;padding:20px 20px calc(24px + env(safe-area-inset-bottom));animation:up .3s ease;text-align:center}
+.sh{display:flex;justify-content:space-between;align-items:center;font-size:17px;font-weight:600;margin-bottom:14px}.x{color:#0071e3;font-weight:400;cursor:pointer;font-size:16px}
+.badge{display:inline-block;padding:4px 10px;border-radius:8px;font-weight:700;font-size:15px}.ap{background:#000;color:#fff}.ali{background:#1677ff;color:#fff}
+.card{background:linear-gradient(135deg,#c8102e,#7a0a1c);color:#fff;border-radius:14px;padding:16px;text-align:left;margin:10px 0;font-size:15px}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eee;font-size:15px}.amt{font-size:30px;font-weight:700;margin:10px 0}
+.demo{color:#86868b;font-size:11px;margin-top:10px}.fid{width:80px;height:80px;margin:14px auto;border:4px solid #0071e3;border-radius:22px;position:relative;overflow:hidden}
+.fid:after{content:"";position:absolute;left:0;right:0;height:4px;background:#34c759;animation:scan 1s linear infinite}@keyframes scan{from{top:0}to{top:100%}}
+.spin{width:44px;height:44px;border:4px solid #e5e5e7;border-top-color:#1677ff;border-radius:50%;margin:14px auto;animation:rot .8s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
+.alih{background:#1677ff;color:#fff;margin:-20px -20px 14px;padding:16px;border-radius:20px 20px 0 0;font-weight:600;display:flex;justify-content:space-between}
 </style></head><body>
 <div class="nav"><span>iPhone Duo</span><span>预订</span></div>
 <div class="wrap" id="buy">
@@ -36,7 +46,15 @@ canvas{position:fixed;inset:0;pointer-events:none;z-index:9}
 <div class="track"><div class="st d"><b></b>已下单</div><div class="st d"><b></b>备货中</div><div class="st"><b></b>10月23日可取货</div><div class="st"><b></b>已取货</div></div>
 <canvas id="qrc" width="210" height="210" style="position:static;display:block;margin:10px auto;border-radius:12px"></canvas><div class="sub">凭此码到店取货 (娱乐)</div>
 <button class="btn" onclick="location.reload()">返回</button></div>
-<footer>娱乐页面，非 Apple 官方，不产生任何订单</footer><canvas id="cf"></canvas>
+<footer>娱乐页面，非 Apple 官方，不产生任何订单</footer><div class="mask" id="mPick"><div class="sheet"><div class="sh"><span class="x" onclick="cl()">取消</span><span>选择付款方式</span><span style="width:32px"></span></div>
+<div class="amt" id="a0"></div><div class="opts"><div class="opt" id="pAP" onclick="op('mAP')"><span class="badge ap">Pay</span><span>Apple Pay</span></div><div class="opt" id="pALI" onclick="op('mALI')"><span class="badge ali">支</span><span>支付宝</span></div></div><div class="demo">模拟付款，不会扣款</div></div></div>
+<div class="mask" id="mAP"><div class="sheet"><div class="sh"><span class="badge ap">Pay</span><span class="x" onclick="cl()">取消</span></div><div id="apBody">
+<div class="card">招商银行<br><br>•••• 8888</div><div class="row"><span>商户</span><span>过把瘾商店 (演示)</span></div><div class="row"><span>金额</span><b class="amtv"></b></div>
+<div style="margin:16px 0 6px;font-size:15px">双击侧边按钮以支付</div><button class="btn" id="apGo" style="background:#000" onclick="apPay()">轻点模拟付款</button></div><div class="demo">模拟付款，不会扣款</div></div></div>
+<div class="mask" id="mALI"><div class="sheet"><div class="alih"><span>支付宝收银台 · 演示</span><span class="x" style="color:#fff" onclick="cl()">取消</span></div><div id="aliBody">
+<div class="amt amtv"></div><div class="row"><span>订单信息</span><span>过把瘾商店 (演示)</span></div><div class="row"><span>付款方式</span><span>余额宝</span></div>
+<button class="btn" id="aliGo" style="background:#1677ff" onclick="aliPay()">确认付款</button></div><div class="demo">模拟付款，不会扣款</div></div></div>
+<canvas id="cf"></canvas>
 <script>
 const C=[["星光白色","#f3efe6","white"],["夜空色","#2b313d","dark"]],S=[["256GB",15999],["512GB",17999],["1TB",20999],["2TB",24999]];
 let c=0,s=0;const $=i=>document.getElementById(i),f=n=>"RMB "+n.toLocaleString();
@@ -44,8 +62,14 @@ function r(){colors.innerHTML=C.map((x,i)=>`<div class="opt ${i==c?'on':''}" dat
 caps.innerHTML=S.map((x,i)=>`<div class="opt ${i==s?'on':''}" data-s="${i}"><span>${x[0]}</span><span class="price">${f(x[1])}</span></div>`).join("");
 ph.className="phone "+C[c][2];sum.innerHTML=`iPhone Duo ${S[s][0]} ${C[c][0]} × 1<br>自取 · Apple 浦东 · 预计可取货：10月23日<br><span class="total">${f(S[s][1])}</span>`}
 document.onclick=e=>{const o=e.target.closest("[data-c],[data-s]");if(!o)return;if(o.dataset.c)c=+o.dataset.c;if(o.dataset.s)s=+o.dataset.s;r()};r();
-go.onclick=()=>{no.textContent="W"+Math.floor(1e9+Math.random()*9e9);
-rc.innerHTML=`商品：iPhone Duo<br>颜色：${C[c][0]}<br>容量：${S[s][0]}<br>数量：1<br>金额：<b>${f(S[s][1])}</b>`+`<br>取货门店：Apple 浦东<br>预计可取货：10月23日`;qr(no.textContent);
+let pm="";const P=()=>f(S[s][1]);
+function cl(){document.querySelectorAll(".mask").forEach(m=>m.classList.remove("on"))}
+function op(id){cl();$(id).classList.add("on");document.querySelectorAll(".amtv").forEach(e=>e.textContent=P())}
+go.onclick=()=>{a0.textContent=P();op("mPick")};
+function apPay(){apBody.innerHTML='<div class="fid"></div><div>Face ID</div>';setTimeout(()=>{apBody.innerHTML='<div class="check">✓</div><div style="font-size:17px">完成</div>';setTimeout(()=>done("Apple Pay"),900)},1500)}
+function aliPay(){aliBody.innerHTML='<div class="spin"></div><div>正在付款…</div>';setTimeout(()=>{aliBody.innerHTML='<div class="check" style="background:#1677ff">✓</div><div style="font-size:17px">支付成功</div>';setTimeout(()=>done("支付宝"),900)},1500)}
+function done(m){cl();no.textContent="W"+Math.floor(1e9+Math.random()*9e9);
+rc.innerHTML=`商品：iPhone Duo<br>颜色：${C[c][0]}<br>容量：${S[s][0]}<br>数量：1<br>金额：<b>${P()}</b><br>付款方式：${m}<br>已付款 ${P()}<br>取货门店：Apple 浦东<br>预计可取货：10月23日`;qr(no.textContent);
 buy.style.display="none";ok.style.display="block";scrollTo(0,0);boom()};
 function qr(t){const x=qrc.getContext("2d"),n=25,z=8,o=5;let h=0;for(const ch of t)h=(h*31+ch.charCodeAt(0))>>>0;const rnd=()=>(h=(h*1103515245+12345)>>>0)/4294967296;
 x.fillStyle="#fff";x.fillRect(0,0,210,210);x.fillStyle="#1d1d1f";const f=(a,b)=>a<7&&b<7||a>=n-7&&b<7||a<7&&b>=n-7;
