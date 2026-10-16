@@ -39,6 +39,7 @@ canvas{position:fixed;inset:0;pointer-events:none;z-index:9}
 .open:after{content:"";position:absolute;top:5px;bottom:5px;left:50%;width:1px;background:rgba(255,255,255,.25)}
 .hero.fold .open{width:0;padding:0;opacity:0;margin-left:-18px}@media(max-width:380px){.open{width:170px}.phone{width:104px}}
 .heroimg{background:#fff;margin:22px 0 10px}.heroimg img{display:block;width:100%;height:auto;filter:drop-shadow(0 14px 18px rgba(0,0,0,.16))}
+#pAP{padding:8px;justify-content:center;background:#f5f5f7}.apimg{display:block;width:100%;max-width:340px;margin:0 auto;height:auto;cursor:pointer;filter:drop-shadow(0 4px 10px rgba(0,0,0,.12))}
 </style></head><body>
 <div class="nav"><span>iPhone Duo</span><span>预订</span></div>
 <div class="wrap" id="buy">
@@ -55,10 +56,10 @@ canvas{position:fixed;inset:0;pointer-events:none;z-index:9}
 <canvas id="qrc" width="210" height="210" style="position:static;display:block;margin:10px auto;border-radius:12px"></canvas><div class="sub">凭此码到店取货 (娱乐)</div>
 <button class="btn" onclick="location.reload()">返回</button></div>
 <footer>娱乐页面，非 Apple 官方，不产生任何订单</footer><div class="mask" id="mPick"><div class="sheet"><div class="sh"><span class="x" onclick="cl()">取消</span><span>选择付款方式</span><span style="width:32px"></span></div>
-<div class="amt" id="a0"></div><div class="opts"><div class="opt" id="pAP" onclick="op('mAP')"><span class="badge ap">Pay</span><span>Apple Pay</span></div><div class="opt" id="pALI" onclick="op('mALI')"><span class="badge ali">支</span><span>支付宝</span></div></div><div class="demo">模拟付款，不会扣款</div></div></div>
-<div class="mask" id="mAP"><div class="sheet"><div class="sh"><span class="badge ap">Pay</span><span class="x" onclick="cl()">取消</span></div><div id="apBody">
+<div class="amt" id="a0"></div><div class="opts"><div class="opt" id="pAP" onclick="op('mAP')"><img src="applepay-btn.png" alt="Apple Pay" class="apimg"></div><div class="opt" id="pALI" onclick="op('mALI')"><span class="badge ali">支</span><span>支付宝</span></div></div><div class="demo">模拟付款，不会扣款</div></div></div>
+<div class="mask" id="mAP"><div class="sheet" style="background:#f5f5f7"><div class="sh"><span>Apple Pay</span><span class="x" onclick="cl()">取消</span></div><div id="apBody">
 <div class="card">招商银行<br><br>•••• 8888</div><div class="row"><span>商户</span><span>过把瘾商店 (演示)</span></div><div class="row"><span>金额</span><b class="amtv"></b></div>
-<div style="margin:16px 0 6px;font-size:15px">双击侧边按钮以支付</div><button class="btn" id="apGo" style="background:#000" onclick="apPay()">轻点模拟付款</button></div><div class="demo">模拟付款，不会扣款</div></div></div>
+<div style="margin:16px 0 6px;font-size:15px">双击侧边按钮以支付</div><img src="applepay-btn.png" alt="轻点模拟付款" id="apGo" class="apimg" onclick="apPay()" style="margin-top:10px"><div class="price">轻点模拟付款</div></div><div class="demo">模拟付款，不会扣款</div></div></div>
 <div class="mask" id="mALI"><div class="sheet"><div class="alih"><span>支付宝收银台 · 演示</span><span class="x" style="color:#fff" onclick="cl()">取消</span></div><div id="aliBody">
 <div class="amt amtv"></div><div class="row"><span>订单信息</span><span>过把瘾商店 (演示)</span></div><div class="row"><span>付款方式</span><span>余额宝</span></div>
 <button class="btn" id="aliGo" style="background:#1677ff" onclick="aliPay()">确认付款</button></div><div class="demo">模拟付款，不会扣款</div></div></div>
