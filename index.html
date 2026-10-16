@@ -31,11 +31,18 @@ canvas{position:fixed;inset:0;pointer-events:none;z-index:9}
 .fid:after{content:"";position:absolute;left:0;right:0;height:4px;background:#34c759;animation:scan 1s linear infinite}@keyframes scan{from{top:0}to{top:100%}}
 .spin{width:44px;height:44px;border:4px solid #e5e5e7;border-top-color:#1677ff;border-radius:50%;margin:14px auto;animation:rot .8s linear infinite}@keyframes rot{to{transform:rotate(360deg)}}
 .alih{background:#1677ff;color:#fff;margin:-20px -20px 14px;padding:16px;border-radius:20px 20px 0 0;font-weight:600;display:flex;justify-content:space-between}
+.hero{gap:18px;align-items:center;cursor:pointer;padding:34px 10px}.phone{width:118px;height:250px;border-radius:26px;flex:none;transition:all .5s}
+.cam{top:14px;left:12px;width:76px;height:36px;border-radius:18px;background:rgba(0,0,0,.22);box-shadow:inset 0 0 0 2px rgba(200,200,210,.6)}
+.cam i{width:24px;height:24px;top:6px!important;bottom:auto!important}.cam i:nth-child(1){left:7px}.cam i:nth-child(2){left:36px;right:auto}.cam u{position:absolute;width:6px;height:6px;border-radius:50%;background:#ffe9a8;right:7px;top:15px}
+.open{width:200px;height:250px;border-radius:22px;background:#1b1b1d;padding:5px;box-shadow:0 20px 40px rgba(0,0,0,.2);flex:none;transition:all .5s;position:relative}
+.scr{width:100%;height:100%;border-radius:18px;background:radial-gradient(120% 60% at 30% 100%,#e9cfa3 0 40%,transparent 41%),radial-gradient(130% 55% at 85% 100%,#d9b685 0 45%,transparent 46%),linear-gradient(180deg,transparent 50%,#8792a8 50% 58%,transparent 58%),linear-gradient(180deg,#a9c7e6,#f5dfb5 62%)}
+.open:after{content:"";position:absolute;top:5px;bottom:5px;left:50%;width:1px;background:rgba(255,255,255,.25)}
+.hero.fold .open{width:0;padding:0;opacity:0;margin-left:-18px}@media(max-width:380px){.open{width:170px}.phone{width:104px}}
 </style></head><body>
 <div class="nav"><span>iPhone Duo</span><span>预订</span></div>
 <div class="wrap" id="buy">
 <div class="new">新品</div><h1>购买 iPhone Duo</h1><div class="sub">RMB 15999 起</div>
-<div class="hero"><div class="phone white" id="ph"><div class="cam"><i></i><i></i></div></div></div>
+<div class="hero" id="hero" onclick="this.classList.toggle('fold')"><div class="phone white" id="ph"><div class="cam"><i></i><i></i><u></u></div></div><div class="open"><div class="scr"></div></div></div><div class="sub" style="text-align:center;margin-top:-12px">轻点图片 折叠/展开</div>
 <h2>外观。<span class="price">选择你喜欢的颜色。</span></h2><div class="opts" id="colors"></div>
 <h2>存储容量。<span class="price">需要多少空间？</span></h2><div class="opts" id="caps"></div>
 <h2>数量</h2><div class="opt on">1 台</div>
